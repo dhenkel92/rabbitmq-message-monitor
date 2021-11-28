@@ -13,6 +13,7 @@ func NewConsumer(conf ConsumerConfig) (*Consumer, error) {
 		connection: nil,
 		channel:    nil,
 		queue:      nil,
+		name:       conf.ConsumerName,
 	}
 
 	var err error

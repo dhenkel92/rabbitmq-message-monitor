@@ -9,10 +9,12 @@ type Consumer struct {
 	connection *amqp.Connection
 	channel    *amqp.Channel
 	queue      *amqp.Queue
+	name       string
 }
 
 type ConsumerConfig struct {
 	ConnectionString string
 	QueuePrefix      string
 	Bindings         []settings.ExchangeRTBinding
+	ConsumerName     string
 }

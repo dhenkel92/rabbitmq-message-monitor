@@ -2,7 +2,7 @@ package settings
 
 type GenericSettings struct {
 	ConnectionString string
-	QueuePrefix      string
+	ConsumerName     string
 }
 
 type ExchangeRTBinding struct {
@@ -11,6 +11,7 @@ type ExchangeRTBinding struct {
 }
 
 type ExchangeMonitoringSettings struct {
-	Generic  GenericSettings
-	Bindings []ExchangeRTBinding
+	Generic     GenericSettings
+	Bindings    []ExchangeRTBinding
+	QueuePrefix string
 }

@@ -8,8 +8,9 @@ import (
 func MonitorExchange(conf *settings.ExchangeMonitoringSettings) error {
 	consumer, err := rabbitmq.NewConsumer(rabbitmq.ConsumerConfig{
 		ConnectionString: conf.Generic.ConnectionString,
-		QueuePrefix:      conf.Generic.QueuePrefix,
+		QueuePrefix:      conf.QueuePrefix,
 		Bindings:         conf.Bindings,
+		ConsumerName:     conf.Generic.ConsumerName,
 	})
 	if err != nil {
 		return err

@@ -7,7 +7,7 @@ import (
 )
 
 func (consumer *Consumer) Consume() error {
-	msgs, err := consumer.channel.Consume(consumer.queue.Name, "isso", true, false, false, false, amqp.Table{})
+	msgs, err := consumer.channel.Consume(consumer.queue.Name, consumer.name, true, false, false, false, amqp.Table{})
 	if err != nil {
 		return err
 	}

@@ -21,9 +21,9 @@ func initApp() *cli.App {
 				Aliases:  []string{"c"},
 			},
 			&cli.StringFlag{
-				Name:  "queue-prefix",
-				Usage: "Name prefix to use for temporal queues.",
-				Value: "rmq-message-monitor",
+				Name:    "consumer-name",
+				Aliases: []string{"name"},
+				Value:   "rmq-message-monitor",
 			},
 		},
 		Commands: []*cli.Command{
@@ -36,6 +36,11 @@ func initApp() *cli.App {
 						Aliases:  []string{"b"},
 						Usage:    "Which bindings should be created for monitoring. Format: <exchange>=<routing_key>",
 						Required: true,
+					},
+					&cli.StringFlag{
+						Name:  "queue-prefix",
+						Usage: "Name prefix to use for temporal queues.",
+						Value: "rmq-message-monitor",
 					},
 				},
 				Action: func(c *cli.Context) error {

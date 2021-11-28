@@ -15,15 +15,16 @@ func ParseExchangeSettingsFromCLI(c *cli.Context) (*ExchangeMonitoringSettings, 
 	}
 
 	return &ExchangeMonitoringSettings{
-		Generic:  parseGenericSettingsFromCLI(c),
-		Bindings: bindings,
+		Generic:     parseGenericSettingsFromCLI(c),
+		Bindings:    bindings,
+		QueuePrefix: c.String("queue-prefix"),
 	}, nil
 }
 
 func parseGenericSettingsFromCLI(c *cli.Context) GenericSettings {
 	return GenericSettings{
 		ConnectionString: c.String("connection-string"),
-		QueuePrefix:      c.String("queue-prefix"),
+		ConsumerName:     c.String("consumer-name"),
 	}
 }
 
