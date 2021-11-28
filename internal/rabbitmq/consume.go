@@ -1,19 +1,20 @@
 package rabbitmq
 
 import (
-	"fmt"
-
 	"github.com/streadway/amqp"
 )
 
-func (consumer *Consumer) Consume() error {
+type ConsumeFunc func(msg amqp.Delivery)
+
+func (consumer *Consumer) Consume(cb ConsumeFunc) error {
 	msgs, err := consumer.channel.Consume(consumer.queue.Name, consumer.name, true, false, false, false, amqp.Table{})
 	if err != nil {
 		return err
 	}
 
 	for msg := range msgs {
-		fmt.Println(msg.RoutingKey)
+		// todo: maybe add error handling
+		cb(msg)
 	}
 
 	return nil
