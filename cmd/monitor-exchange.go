@@ -1,11 +1,13 @@
 package cmd
 
 import (
-	"fmt"
+	"time"
 
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/collector"
+	"github.com/dhenkel92/rabbitmq-message-monitor/internal/helper"
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/rabbitmq"
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/settings"
+	"github.com/gosuri/uilive"
 	"github.com/streadway/amqp"
 )
 
@@ -21,16 +23,20 @@ func MonitorExchange(conf *settings.ExchangeMonitoringSettings) error {
 	}
 
 	collector := collector.New()
-	if err = consumer.Consume(createConsumeFunc(&collector)); err != nil {
-		return err
-	}
+	// todo: get error
+	go consumer.Consume(createConsumeFunc(&collector))
 
-	return nil
+	writer := uilive.New()
+	writer.Start()
+	helper.ClearTerminal()
+	for {
+		collector.PrintTable(writer)
+		time.Sleep(10 * time.Second)
+	}
 }
 
 func createConsumeFunc(collect *collector.Collector) rabbitmq.ConsumeFunc {
 	return func(msg amqp.Delivery) {
 		collect.AppendRTStat(msg.RoutingKey, float64(len(msg.Body)))
-		fmt.Println(msg.RoutingKey)
 	}
 }

@@ -3,6 +3,7 @@ package collector
 import "sync"
 
 type RoutingKeyStats struct {
+	RoutingKey string
 	Count      int
 	TotalBytes float64
 }
