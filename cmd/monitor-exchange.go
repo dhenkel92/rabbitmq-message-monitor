@@ -1,12 +1,23 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/dhenkel92/rabbitmq-message-monitor/internal/rabbitmq"
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/settings"
 )
 
 func MonitorExchange(conf *settings.ExchangeMonitoringSettings) error {
-	fmt.Println(*conf)
+	consumer, err := rabbitmq.NewConsumer(rabbitmq.ConsumerConfig{
+		ConnectionString: conf.Generic.ConnectionString,
+		QueuePrefix:      conf.Generic.QueuePrefix,
+		Bindings:         conf.Bindings,
+	})
+	if err != nil {
+		return err
+	}
+
+	if err = consumer.Consume(); err != nil {
+		return err
+	}
+
 	return nil
 }
