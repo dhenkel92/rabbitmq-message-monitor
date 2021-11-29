@@ -6,6 +6,8 @@ import (
 	termui "github.com/gizak/termui/v3"
 )
 
+var SEARCH_KEY_REGEX = regexp.MustCompile(`^<.*>$`)
+
 func (ui *UI) handleKeyPress(e *termui.Event) bool {
 	if ui.isSearchActive {
 		ui.search(e)
@@ -54,8 +56,7 @@ func (ui *UI) handleKeyPress(e *termui.Event) bool {
 }
 
 func (ui *UI) search(e *termui.Event) {
-	re := regexp.MustCompile(`^<.*>$`)
-	if re.Match([]byte(e.ID)) {
+	if SEARCH_KEY_REGEX.Match([]byte(e.ID)) {
 		switch e.ID {
 		case "<Backspace>":
 			ui.searchBar.RemoveLast()
