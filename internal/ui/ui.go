@@ -48,7 +48,7 @@ func NewUI() (*UI, error) {
 		types.WidgetSize{StartX: settingsRightBorder, EndX: msgSizeHistRightBorder, StartY: 0, EndY: (settingsHeight + shortcutHeight)},
 	)
 	msgCountHistory := lineChart.New(
-		"Total Message Count (k / s)",
+		"Total Message Count (k / 10s)",
 		types.WidgetSize{StartX: msgSizeHistRightBorder, EndX: termWidth, StartY: 0, EndY: (settingsHeight + shortcutHeight)},
 	)
 
