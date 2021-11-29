@@ -31,7 +31,11 @@ func (list *RoutingKeyList) renderList() {
 func (list *RoutingKeyList) renderHeader(width ListColumnWidhts) string {
 	rkH := "Routing Key"
 	countH := "Count"
+	avgH := "AVG"
+	nfH := "95%"
+	nnH := "99%"
 	sizeH := "Total Size"
+
 	switch list.sorting {
 	case RK_SORTING_NAME_ASC:
 		rkH += " ▲"
@@ -41,6 +45,18 @@ func (list *RoutingKeyList) renderHeader(width ListColumnWidhts) string {
 		countH += " ▲"
 	case RK_SORTING_COUNT_DESC:
 		countH += " ▼"
+	case RK_SORTING_AVG_ASC:
+		avgH += " ▲"
+	case RK_SORTING_AVG_DESC:
+		avgH += " ▼"
+	case RK_SORTING_NINETY_FIFE_ASC:
+		nfH += " ▲"
+	case RK_SORTING_NINETY_FIFE_DESC:
+		nfH += " ▼"
+	case RK_SORTING_NINETY_NINE_ASC:
+		nnH += " ▲"
+	case RK_SORTING_NINETY_NINE_DESC:
+		nnH += " ▼"
 	case RK_SORTING_TOTAL_SIZE_ASC:
 		sizeH += " ▲"
 	case RK_SORTING_TOTAL_SIZE_DESC:
@@ -51,9 +67,9 @@ func (list *RoutingKeyList) renderHeader(width ListColumnWidhts) string {
 		"[%-*s](fg:white) [%-*s](fg:white) [%-*s](fg:white) [%-*s](fg:white) [%-*s](fg:white) [%-*s](fg:white)",
 		width.routingKey, rkH,
 		width.count, countH,
-		width.avg, "avg",
-		width.ninetyFife, "95%",
-		width.ninetyNine, "99%",
+		width.avg, avgH,
+		width.ninetyFife, nfH,
+		width.ninetyNine, nnH,
 		width.totalSize, sizeH,
 	)
 }
