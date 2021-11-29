@@ -1,0 +1,51 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+project_name: rabbitmq-message-monitor
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod download
+builds:
+  - env:
+      - CGO_ENABLED=0
+    main: ./main.go
+    id: rabbitmq-message-monitor
+    binary: rabbitmq-message-monitor
+    goos:
+      - linux
+      - windows
+      - darwin
+archives:
+  - name_template: "rabbitmq-message-monitor-{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    id: rabbitmq-message-monitor
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+    builds:
+      - rabbitmq-message-monitor
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+brews:
+  - tap:
+      owner: dhenkel92
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    folder: Formula
+    name: rabbitmq-message-monitor
+    ids:
+      - rabbitmq-message-monitor
+    homepage: https://github.com/dhenkel92/rabbitmq-message-monitor
+    description: Kubernetes Pod Helper Util
+    test: |
+      system "#{bin}/rabbitmq-message-monitor -h"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
