@@ -8,6 +8,8 @@ import (
 type RoutingKeySorting int
 
 const (
+	RK_DEFAULT_SORTING RoutingKeySorting = RK_SORTING_COUNT_DESC
+
 	RK_SORTING_NAME_ASC        RoutingKeySorting = 0
 	RK_SORTING_NAME_DESC       RoutingKeySorting = 1
 	RK_SORTING_COUNT_ASC       RoutingKeySorting = 2

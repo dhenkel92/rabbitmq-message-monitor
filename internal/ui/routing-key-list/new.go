@@ -7,11 +7,13 @@ import (
 )
 
 func New(title string, termWidth, termHeight, headerHeight int) RoutingKeyList {
-	return RoutingKeyList{
+	list := RoutingKeyList{
 		list:    newList(title, termWidth, termHeight, headerHeight),
 		data:    make([]*collector.RoutingKeyStats, 0),
-		sorting: RK_SORTING_COUNT_DESC,
+		sorting: RK_DEFAULT_SORTING,
 	}
+	list.renderList()
+	return list
 }
 
 func newList(title string, termWidth, termHeight, headerHeight int) *widgets.List {
