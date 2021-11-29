@@ -34,7 +34,7 @@ func NewConsumer(conf ConsumerConfig) (*Consumer, error) {
 		true,
 		false,
 		false,
-		amqp.Table{},
+		amqp.Table{"x-max-length": 1000, "x-overflow": "drop-head"},
 	)
 	if err != nil {
 		return nil, err
