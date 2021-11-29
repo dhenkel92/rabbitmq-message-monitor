@@ -40,7 +40,7 @@ func MonitorExchange(conf *settings.ExchangeMonitoringSettings) error {
 
 func updateUiFnFactory(ui *ui.UI, collector *collector.Collector) helper.IntervalAction {
 	return func() {
-		ui.UpdateListEntries(collector.ToStrRows(ui.LineLength()))
+		ui.UpdateRKListData(collector.GetArrayData())
 	}
 }
 

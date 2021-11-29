@@ -1,33 +1,22 @@
-package collector
+package uiRKList
 
 import (
 	"fmt"
-	"sort"
 
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/helper"
 )
 
-func (collector *Collector) ToStrRows(rowLenght int) []string {
-	vals := make([]RoutingKeyStats, 0)
-	collector.mu.Lock()
-	for _, entry := range collector.routingKeyStats {
-		vals = append(vals, *entry)
-	}
-	collector.mu.Unlock()
-
-	sort.SliceStable(vals, func(i, j int) bool {
-		return vals[i].Count > vals[j].Count
-	})
-
-	rtL, countL, sizeL := calculateCellWidths(rowLenght)
-
+func (list *RoutingKeyList) renderList() {
 	result := make([]string, 0)
+
+	rtL, countL, sizeL := calculateCellWidths(list.list.Inner.Max.X)
+
 	result = append(result, fmt.Sprintf("[%-*s](fg:white) [%-*s](fg:white) [%-*s](fg:white)", rtL, "Routing Key", countL, "Count", sizeL, "Total Size"))
-	for _, entry := range vals {
+	for _, entry := range list.data {
 		result = append(result, fmt.Sprintf("%-*s %-*d %-*s", rtL, entry.RoutingKey, countL, entry.Count, sizeL, helper.FormatBytesToMb(entry.TotalBytes)))
 	}
 
-	return result
+	list.list.Rows = result
 }
 
 func calculateCellWidths(rowLenght int) (int, int, int) {

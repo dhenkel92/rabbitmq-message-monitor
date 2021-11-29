@@ -3,29 +3,32 @@ package ui
 import termui "github.com/gizak/termui/v3"
 
 func (ui *UI) handleKeyPress(e *termui.Event) bool {
+	//todo: remove GetUiElement() hack
 	switch e.ID {
 	case "q", "<C-c>":
 		return true
 	case "j", "<Down>":
-		ui.list.ScrollDown()
+		ui.list.GetUiElement().ScrollDown()
 	case "k", "<Up>":
-		ui.list.ScrollUp()
+		ui.list.GetUiElement().ScrollUp()
 	case "<C-d>":
-		ui.list.ScrollHalfPageDown()
+		ui.list.GetUiElement().ScrollHalfPageDown()
 	case "<C-u>":
-		ui.list.ScrollHalfPageUp()
+		ui.list.GetUiElement().ScrollHalfPageUp()
 	case "<C-f>":
-		ui.list.ScrollPageDown()
+		ui.list.GetUiElement().ScrollPageDown()
 	case "<C-b>":
-		ui.list.ScrollPageUp()
+		ui.list.GetUiElement().ScrollPageUp()
+	case "<Tab>":
+		ui.list.SortNext()
 	case "<Home>":
-		ui.list.ScrollTop()
+		ui.list.GetUiElement().ScrollTop()
 	case "g":
 		if ui.previousKey == "g" {
-			ui.list.ScrollTop()
+			ui.list.GetUiElement().ScrollTop()
 		}
 	case "G", "<End>":
-		ui.list.ScrollBottom()
+		ui.list.GetUiElement().ScrollBottom()
 	}
 
 	if ui.previousKey == "g" {
