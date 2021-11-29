@@ -15,7 +15,7 @@ func newSettingsHeader(size types.WidgetSize) *widgets.Paragraph {
 	header.Text = formatInformation(1, [][]string{
 		{"Refresh rate:", "10s"},
 	})
-	header.SetRect(size.StartX, size.StartY, size.Width, size.Height)
+	header.SetRect(size.StartX, size.StartY, size.EndX, size.EndY)
 	header.Border = true
 	return header
 }
@@ -31,7 +31,7 @@ func newShortcutHeader(size types.WidgetSize) *widgets.Paragraph {
 		{"[<q>](fg:blue)", "quit"},
 		{"[<s>](fg:blue)", "change sorting"},
 	})
-	header.SetRect(size.StartX, size.StartY, size.Width, size.Height)
+	header.SetRect(size.StartX, size.StartY, size.EndX, size.EndY)
 	header.Border = true
 	return header
 }

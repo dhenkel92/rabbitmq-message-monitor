@@ -4,9 +4,9 @@ import "time"
 
 type IntervalAction func()
 
-func StartInterval(interval time.Duration, fn IntervalAction) chan struct{} {
+func StartInterval(interval time.Duration, fn IntervalAction) chan bool {
 	ticker := time.NewTicker(interval)
-	quit := make(chan struct{})
+	quit := make(chan bool)
 
 	go func() {
 		for {

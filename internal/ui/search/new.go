@@ -18,7 +18,7 @@ func newSettingsHeader(size types.WidgetSize) *widgets.Paragraph {
 	header := widgets.NewParagraph()
 	header.Title = "Search"
 	header.Text = "hello search"
-	header.SetRect(size.StartX, size.StartY, size.Width, size.Height)
+	header.SetRect(size.StartX, size.StartY, size.EndX, size.EndY)
 	header.Border = true
 	return header
 }

@@ -21,7 +21,7 @@ func newList(title string, size types.WidgetSize) *widgets.List {
 	l.Title = title
 	l.TextStyle = termui.NewStyle(termui.ColorYellow)
 	l.WrapText = false
-	l.SetRect(size.StartX, size.StartY, size.Width, size.Height)
+	l.SetRect(size.StartX, size.StartY, size.EndX, size.EndY)
 
 	return l
 }

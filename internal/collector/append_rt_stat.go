@@ -11,5 +11,8 @@ func (c *Collector) AppendRTStat(rt string, msgSize float64) {
 	c.routingKeyStats[rt].TotalBytes += msgSize
 	c.routingKeyStats[rt].Sizes = append(c.routingKeyStats[rt].Sizes, msgSize)
 
+	c.overallStats.MessageCount += 1
+	c.overallStats.TotalBytes += msgSize
+
 	c.mu.Unlock()
 }

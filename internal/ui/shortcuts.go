@@ -60,6 +60,8 @@ func (ui *UI) search(e *termui.Event) {
 		switch e.ID {
 		case "<Backspace>":
 			ui.searchBar.RemoveLast()
+		case "<Escape>":
+			fallthrough
 		case "<Enter>":
 			ui.isSearchActive = false
 		}

@@ -8,8 +8,13 @@ func (list *RoutingKeyList) FilterName(expression string) {
 }
 
 func filterData(expression string, data []*RoutingKeyData) []*RoutingKeyData {
-	re := regexp.MustCompile(expression)
 	filtered := make([]*RoutingKeyData, 0)
+	re, err := regexp.Compile(expression)
+
+	if err != nil {
+		// todo: show error to user
+		return filtered
+	}
 
 	for _, entry := range data {
 		if re.Match([]byte(entry.RoutingKey)) {

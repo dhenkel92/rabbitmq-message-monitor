@@ -5,6 +5,7 @@ import (
 
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/collector"
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/helper"
+	"github.com/dhenkel92/rabbitmq-message-monitor/internal/history"
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/rabbitmq"
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/settings"
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/ui"
@@ -24,9 +25,12 @@ func MonitorExchange(conf *settings.ExchangeMonitoringSettings) error {
 
 	ui, err := ui.NewUI()
 	collector := collector.New()
+	history := history.New()
+
 	// todo: get error
 	go consumer.Consume(createConsumeFunc(&collector))
-	helper.StartInterval(10*time.Second, updateUiFnFactory(ui, &collector))
+	stopUpdateUI := helper.StartInterval(10*time.Second, updateUiFnFactory(ui, &collector, &history))
+	stopUpdateHistory := helper.StartInterval(10*time.Second, updateHistory(&history, &collector))
 
 	if err != nil {
 		return err
@@ -35,12 +39,27 @@ func MonitorExchange(conf *settings.ExchangeMonitoringSettings) error {
 		return err
 	}
 
+	stopUpdateUI <- true
+	stopUpdateHistory <- true
+
 	return nil
 }
 
-func updateUiFnFactory(ui *ui.UI, collector *collector.Collector) helper.IntervalAction {
+func updateUiFnFactory(ui *ui.UI, collector *collector.Collector, recorder *history.HistoryRecorder) helper.IntervalAction {
 	return func() {
-		ui.UpdateRKListData(collector.GetArrayData())
+		ui.UpdateData(
+			collector.GetArrayData(),
+			recorder.GetRecordValues(history.RECORD_SUM_SIZE_KEY),
+			recorder.GetRecordValues(history.RECORD_MSG_COUNT_KEY),
+		)
+	}
+}
+
+func updateHistory(recorder *history.HistoryRecorder, collector *collector.Collector) helper.IntervalAction {
+	return func() {
+		overallStats := collector.GetOverallStats()
+		recorder.RecordDiff(history.RECORD_SUM_SIZE_KEY, overallStats.TotalBytes)
+		recorder.RecordDiff(history.RECORD_MSG_COUNT_KEY, float64(overallStats.MessageCount))
 	}
 }
 

@@ -15,4 +15,10 @@ type RoutingKeyStatsMap map[string]*RoutingKeyStats
 type Collector struct {
 	mu              sync.Mutex
 	routingKeyStats RoutingKeyStatsMap
+	overallStats    OverallStats
+}
+
+type OverallStats struct {
+	TotalBytes   float64
+	MessageCount int
 }

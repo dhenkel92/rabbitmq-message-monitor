@@ -5,6 +5,7 @@ import (
 
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/collector"
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/types"
+	lineChart "github.com/dhenkel92/rabbitmq-message-monitor/internal/ui/line-chart"
 	uiRKList "github.com/dhenkel92/rabbitmq-message-monitor/internal/ui/routing-key-list"
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/ui/search"
 	termui "github.com/gizak/termui/v3"
@@ -12,8 +13,9 @@ import (
 )
 
 const (
-	headerHeight = 6
-	searchHeigh  = 3
+	settingsHeight = 6
+	shortcutHeight = 8
+	searchHeigh    = 3
 )
 
 type UI struct {
@@ -21,6 +23,9 @@ type UI struct {
 	shortcutHeader *widgets.Paragraph
 	list           *uiRKList.RoutingKeyList
 	searchBar      *search.SearchBar
+
+	msgSizeHistory  *lineChart.LineChart
+	msgCountHistory *lineChart.LineChart
 
 	previousKey    string
 	isSearchActive bool
@@ -32,26 +37,42 @@ func NewUI() (*UI, error) {
 	}
 
 	termWidth, termHeight := termui.TerminalDimensions()
+	settingsRightBorder := int(float64(termWidth) / 100.0 * 30.0)
+	msgSizeHistRightBorder := int(float64(termWidth) / 100.0 * 65.0)
 
-	settingsHeader := newSettingsHeader(types.WidgetSize{StartX: 0, StartY: 0, Width: termWidth / 100 * 30, Height: headerHeight})
-	shortcutHeader := newShortcutHeader(types.WidgetSize{StartX: termWidth / 100 * 30, StartY: 0, Width: termWidth / 100 * 70, Height: headerHeight})
-	searchBar := search.New(types.WidgetSize{StartX: 0, StartY: headerHeight, Width: termWidth, Height: (searchHeigh + headerHeight)})
-	routingKeyList := uiRKList.New("Routing Keys", types.WidgetSize{StartX: 0, StartY: (headerHeight + searchHeigh), Width: termWidth, Height: termHeight})
+	settingsHeader := newSettingsHeader(types.WidgetSize{StartX: 0, StartY: 0, EndX: settingsRightBorder, EndY: settingsHeight})
+	shortcutHeader := newShortcutHeader(types.WidgetSize{StartX: 0, StartY: settingsHeight, EndX: settingsRightBorder, EndY: (settingsHeight + shortcutHeight)})
+
+	msgSizeHistory := lineChart.New(
+		"Total Message Size (MB / 10s)",
+		types.WidgetSize{StartX: settingsRightBorder, EndX: msgSizeHistRightBorder, StartY: 0, EndY: (settingsHeight + shortcutHeight)},
+	)
+	msgCountHistory := lineChart.New(
+		"Total Message Count (k / s)",
+		types.WidgetSize{StartX: msgSizeHistRightBorder, EndX: termWidth, StartY: 0, EndY: (settingsHeight + shortcutHeight)},
+	)
+
+	searchBar := search.New(types.WidgetSize{StartX: 0, StartY: (settingsHeight + shortcutHeight), EndX: termWidth, EndY: (searchHeigh + settingsHeight + shortcutHeight)})
+	routingKeyList := uiRKList.New("Routing Keys", types.WidgetSize{StartX: 0, StartY: (settingsHeight + searchHeigh + shortcutHeight), EndX: termWidth, EndY: termHeight})
 
 	return &UI{
-		settingsHeader: settingsHeader,
-		shortcutHeader: shortcutHeader,
-		list:           &routingKeyList,
-		searchBar:      &searchBar,
+		settingsHeader:  settingsHeader,
+		shortcutHeader:  shortcutHeader,
+		list:            &routingKeyList,
+		searchBar:       &searchBar,
+		msgSizeHistory:  &msgSizeHistory,
+		msgCountHistory: &msgCountHistory,
 	}, nil
 }
 
 func (ui *UI) Render() {
-	termui.Render(ui.settingsHeader, ui.shortcutHeader, ui.searchBar.GetUiElement(), ui.list.GetUiElement())
+	termui.Render(ui.settingsHeader, ui.shortcutHeader, ui.msgSizeHistory.GetUiElement(), ui.msgCountHistory.GetUiElement(), ui.searchBar.GetUiElement(), ui.list.GetUiElement())
 }
 
-func (ui *UI) UpdateRKListData(data []*collector.RoutingKeyStats) {
+func (ui *UI) UpdateData(data []*collector.RoutingKeyStats, msgSizeHistory, msgCount []float64) {
 	ui.list.SetData(data)
+	ui.msgSizeHistory.SetBytes(msgSizeHistory)
+	ui.msgCountHistory.SetRPS(msgCount)
 	ui.Render()
 }
 
