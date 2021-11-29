@@ -1,8 +1,18 @@
 package ui
 
-import termui "github.com/gizak/termui/v3"
+import (
+	"regexp"
+
+	termui "github.com/gizak/termui/v3"
+)
 
 func (ui *UI) handleKeyPress(e *termui.Event) bool {
+	if ui.isSearchActive {
+		ui.search(e)
+		ui.list.FilterName(ui.searchBar.GetExpression())
+		ui.Render()
+		return false
+	}
 	//todo: remove GetUiElement() hack
 	switch e.ID {
 	case "q", "<C-c>":
@@ -23,6 +33,8 @@ func (ui *UI) handleKeyPress(e *termui.Event) bool {
 		ui.list.SortNext()
 	case "<Home>":
 		ui.list.GetUiElement().ScrollTop()
+	case "/":
+		ui.isSearchActive = true
 	case "g":
 		if ui.previousKey == "g" {
 			ui.list.GetUiElement().ScrollTop()
@@ -39,4 +51,19 @@ func (ui *UI) handleKeyPress(e *termui.Event) bool {
 
 	ui.Render()
 	return false
+}
+
+func (ui *UI) search(e *termui.Event) {
+	re := regexp.MustCompile(`^<.*>$`)
+	if re.Match([]byte(e.ID)) {
+		switch e.ID {
+		case "<Backspace>":
+			ui.searchBar.RemoveLast()
+		case "<Enter>":
+			ui.isSearchActive = false
+		}
+		return
+	}
+
+	ui.searchBar.AddKey(e.ID)
 }

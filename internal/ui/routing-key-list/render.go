@@ -7,13 +7,22 @@ import (
 	"github.com/dustin/go-humanize"
 )
 
-func (list *RoutingKeyList) renderList() {
+func (list *RoutingKeyList) Render() {
+	filtered := list.data
+	if list.nameFilterExpression != "" {
+		filtered = filterData(list.nameFilterExpression, filtered)
+	}
+	filtered = sortData(list.sorting, filtered)
+	list.renderList(filtered)
+}
+
+func (list *RoutingKeyList) renderList(data []*RoutingKeyData) {
 	result := make([]string, 0)
 
 	width := calculateCellWidths(list.list.Inner.Max.X)
 
 	result = append(result, list.renderHeader(width))
-	for _, entry := range list.data {
+	for _, entry := range data {
 		result = append(result, fmt.Sprintf(
 			"%-*s %-*d %-*s %-*s %-*s %-*s",
 			width.routingKey, entry.RoutingKey,

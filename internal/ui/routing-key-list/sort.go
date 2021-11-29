@@ -25,8 +25,7 @@ const (
 
 func (list *RoutingKeyList) Sort(sorting RoutingKeySorting) {
 	list.sorting = sorting
-	list.data = sortData(list.sorting, list.data)
-	list.renderList()
+	list.Render()
 }
 
 func sortData(sorting RoutingKeySorting, data []*RoutingKeyData) []*RoutingKeyData {

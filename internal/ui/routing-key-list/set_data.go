@@ -12,7 +12,7 @@ func (list *RoutingKeyList) SetData(data []*collector.RoutingKeyStats) {
 	}
 
 	list.data = sortData(list.sorting, converted)
-	list.renderList()
+	list.Render()
 }
 
 func rkDataFromRKStats(rkStats *collector.RoutingKeyStats) *RoutingKeyData {

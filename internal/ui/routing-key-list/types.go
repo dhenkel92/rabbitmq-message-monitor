@@ -5,9 +5,11 @@ import (
 )
 
 type RoutingKeyList struct {
-	list    *widgets.List
-	data    []*RoutingKeyData
-	sorting RoutingKeySorting
+	list *widgets.List
+	data []*RoutingKeyData
+
+	sorting              RoutingKeySorting
+	nameFilterExpression string
 }
 
 func (list *RoutingKeyList) GetUiElement() *widgets.List {

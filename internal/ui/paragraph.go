@@ -5,21 +5,22 @@ import (
 	"strings"
 
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/helper"
+	"github.com/dhenkel92/rabbitmq-message-monitor/internal/types"
 	"github.com/gizak/termui/v3/widgets"
 )
 
-func newSettingsHeader(size WidgetSize) *widgets.Paragraph {
+func newSettingsHeader(size types.WidgetSize) *widgets.Paragraph {
 	header := widgets.NewParagraph()
 	header.Title = "RabbitMQ Message Monitor"
 	header.Text = formatInformation(1, [][]string{
 		{"Refresh rate:", "10s"},
 	})
-	header.SetRect(size.startX, size.startY, size.width, size.height)
+	header.SetRect(size.StartX, size.StartY, size.Width, size.Height)
 	header.Border = true
 	return header
 }
 
-func newShortcutHeader(size WidgetSize) *widgets.Paragraph {
+func newShortcutHeader(size types.WidgetSize) *widgets.Paragraph {
 	header := widgets.NewParagraph()
 	header.Title = "Shortcurts"
 	header.Text = formatInformation(2, [][]string{
@@ -30,7 +31,7 @@ func newShortcutHeader(size WidgetSize) *widgets.Paragraph {
 		{"[<q>](fg:blue)", "quit"},
 		{"[<s>](fg:blue)", "change sorting"},
 	})
-	header.SetRect(size.startX, size.startY, size.width, size.height)
+	header.SetRect(size.StartX, size.StartY, size.Width, size.Height)
 	header.Border = true
 	return header
 }
