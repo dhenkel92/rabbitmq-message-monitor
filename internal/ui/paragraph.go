@@ -28,6 +28,7 @@ func newShortcutHeader(size WidgetSize) *widgets.Paragraph {
 		{"[<gg>](fg:blue)", "top"},
 		{"[<G>](fg:blue)", "bottom"},
 		{"[<q>](fg:blue)", "quit"},
+		{"[<s>](fg:blue)", "change sorting"},
 	})
 	header.SetRect(size.startX, size.startY, size.width, size.height)
 	header.Border = true

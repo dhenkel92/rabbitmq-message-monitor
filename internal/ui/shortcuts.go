@@ -19,7 +19,7 @@ func (ui *UI) handleKeyPress(e *termui.Event) bool {
 		ui.list.GetUiElement().ScrollPageDown()
 	case "<C-b>":
 		ui.list.GetUiElement().ScrollPageUp()
-	case "<Tab>":
+	case "s":
 		ui.list.SortNext()
 	case "<Home>":
 		ui.list.GetUiElement().ScrollTop()
