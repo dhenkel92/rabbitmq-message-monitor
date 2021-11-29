@@ -46,4 +46,4 @@ jobs:
         with:
           go-version: 1.17
       - name: Build binary
-        run: go build cmd/pod_helper/main.go
+        run: go build main.go
