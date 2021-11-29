@@ -1,5 +1,10 @@
 package search
 
+func (search *SearchBar) SetSeachActive(isActive bool) {
+	search.isSearchActive = isActive
+	search.Render()
+}
+
 func (search *SearchBar) AddKey(key string) {
 	search.searchTerm += key
 	search.Render()

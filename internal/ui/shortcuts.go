@@ -37,6 +37,7 @@ func (ui *UI) handleKeyPress(e *termui.Event) bool {
 		ui.list.GetUiElement().ScrollTop()
 	case "/":
 		ui.isSearchActive = true
+		ui.searchBar.SetSeachActive(true)
 	case "g":
 		if ui.previousKey == "g" {
 			ui.list.GetUiElement().ScrollTop()
@@ -64,6 +65,7 @@ func (ui *UI) search(e *termui.Event) {
 			fallthrough
 		case "<Enter>":
 			ui.isSearchActive = false
+			ui.searchBar.SetSeachActive(false)
 		}
 		return
 	}
