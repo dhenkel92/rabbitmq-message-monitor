@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/dhenkel92/rabbitmq-message-monitor/internal/helper"
+	"github.com/dustin/go-humanize"
 )
 
 func (list *RoutingKeyList) renderList() {
@@ -18,10 +18,10 @@ func (list *RoutingKeyList) renderList() {
 			"%-*s %-*d %-*s %-*s %-*s %-*s",
 			width.routingKey, entry.RoutingKey,
 			width.count, entry.Count,
-			width.avg, helper.FormatBytesToKb(entry.Avg),
-			width.ninetyFife, helper.FormatBytesToKb(entry.NinetyFife),
-			width.ninetyNine, helper.FormatBytesToKb(entry.NinetyNine),
-			width.totalSize, helper.FormatBytesToKb(entry.TotalBytes),
+			width.avg, humanize.Bytes(uint64(entry.Avg)),
+			width.ninetyFife, humanize.Bytes(uint64(entry.NinetyFife)),
+			width.ninetyNine, humanize.Bytes(uint64(entry.NinetyNine)),
+			width.totalSize, humanize.Bytes(uint64(entry.TotalBytes)),
 		))
 	}
 

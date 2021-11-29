@@ -20,7 +20,7 @@ func newList(title string, termWidth, termHeight, headerHeight int) *widgets.Lis
 	l.Title = title
 	l.TextStyle = termui.NewStyle(termui.ColorYellow)
 	l.WrapText = false
-	l.SetRect(0, headerHeight, termWidth, termHeight-headerHeight)
+	l.SetRect(0, headerHeight, termWidth, termHeight)
 
 	return l
 }
