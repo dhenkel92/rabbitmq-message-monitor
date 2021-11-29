@@ -6,6 +6,7 @@ type RoutingKeyStats struct {
 	RoutingKey string
 	Count      int
 	TotalBytes float64
+	Sizes      []float64
 }
 
 // RoutingKeyStatsMap key is the routeingKey

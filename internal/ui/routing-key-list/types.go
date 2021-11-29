@@ -27,3 +27,12 @@ type RoutingKeyList struct {
 func (list *RoutingKeyList) GetUiElement() *widgets.List {
 	return list.list
 }
+
+type ListColumnWidhts struct {
+	routingKey int
+	count      int
+	avg        int
+	ninetyFife int
+	ninetyNine int
+	totalSize  int
+}

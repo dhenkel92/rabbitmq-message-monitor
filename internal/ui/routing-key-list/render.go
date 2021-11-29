@@ -2,26 +2,37 @@ package uiRKList
 
 import (
 	"fmt"
+	"math"
 
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/helper"
+	"github.com/montanaflynn/stats"
 )
 
 func (list *RoutingKeyList) renderList() {
 	result := make([]string, 0)
 
-	rtL, countL, sizeL := calculateCellWidths(list.list.Inner.Max.X)
+	width := calculateCellWidths(list.list.Inner.Max.X)
 
-	result = append(result, list.renderHeader())
+	result = append(result, list.renderHeader(width))
 	for _, entry := range list.data {
-		result = append(result, fmt.Sprintf("%-*s %-*d %-*s", rtL, entry.RoutingKey, countL, entry.Count, sizeL, helper.FormatBytesToMb(entry.TotalBytes)))
+		avg, _ := stats.Mean(entry.Sizes)
+		ninetyFife, _ := stats.Percentile(entry.Sizes, 95)
+		ninetyNine, _ := stats.Percentile(entry.Sizes, 99)
+		result = append(result, fmt.Sprintf(
+			"%-*s %-*d %-*s %-*s %-*s %-*s",
+			width.routingKey, entry.RoutingKey,
+			width.count, entry.Count,
+			width.avg, helper.FormatBytesToKb(avg),
+			width.ninetyFife, helper.FormatBytesToKb(ninetyFife),
+			width.ninetyNine, helper.FormatBytesToKb(ninetyNine),
+			width.totalSize, helper.FormatBytesToKb(entry.TotalBytes),
+		))
 	}
 
 	list.list.Rows = result
 }
 
-func (list *RoutingKeyList) renderHeader() string {
-	rtL, countL, sizeL := calculateCellWidths(list.list.Inner.Max.X)
-
+func (list *RoutingKeyList) renderHeader(width ListColumnWidhts) string {
 	rkH := "Routing Key"
 	countH := "Count"
 	sizeH := "Total Size"
@@ -40,12 +51,24 @@ func (list *RoutingKeyList) renderHeader() string {
 		sizeH += " ▼"
 	}
 
-	return fmt.Sprintf("[%-*s](fg:white) [%-*s](fg:white) [%-*s](fg:white)", rtL, rkH, countL, countH, sizeL, sizeH)
+	return fmt.Sprintf(
+		"[%-*s](fg:white) [%-*s](fg:white) [%-*s](fg:white) [%-*s](fg:white) [%-*s](fg:white) [%-*s](fg:white)",
+		width.routingKey, rkH,
+		width.count, countH,
+		width.avg, "avg",
+		width.ninetyFife, "95%",
+		width.ninetyNine, "99%",
+		width.totalSize, sizeH,
+	)
 }
 
-func calculateCellWidths(rowLenght int) (int, int, int) {
-	routingKey := rowLenght / 100 * 60
-	count := rowLenght / 100 * 20
-	totalSize := rowLenght / 100 * 20
-	return routingKey, count, totalSize
+func calculateCellWidths(rowLenght int) ListColumnWidhts {
+	return ListColumnWidhts{
+		routingKey: int(math.Round(float64(rowLenght) / 100.0 * 25.0)),
+		count:      int(math.Round(float64(rowLenght) / 100.0 * 14.0)),
+		avg:        int(math.Round(float64(rowLenght) / 100.0 * 14.0)),
+		ninetyFife: int(math.Round(float64(rowLenght) / 100.0 * 14.0)),
+		ninetyNine: int(math.Round(float64(rowLenght) / 100.0 * 14.0)),
+		totalSize:  int(math.Round(float64(rowLenght) / 100.0 * 14.0)),
+	}
 }

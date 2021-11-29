@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func FormatBytesToMb(bytes float64) string {
-	num := bytes / 1024 / 1024
-	return fmt.Sprintf("%.2f Mb", num)
+func FormatBytesToKb(bytes float64) string {
+	num := bytes / 1024.0
+	return fmt.Sprintf("%.2f Kb", num)
 }
