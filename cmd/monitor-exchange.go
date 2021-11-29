@@ -7,7 +7,7 @@ import (
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/helper"
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/rabbitmq"
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/settings"
-	"github.com/gosuri/uilive"
+	"github.com/dhenkel92/rabbitmq-message-monitor/internal/ui"
 	"github.com/streadway/amqp"
 )
 
@@ -22,16 +22,25 @@ func MonitorExchange(conf *settings.ExchangeMonitoringSettings) error {
 		return err
 	}
 
+	ui, err := ui.NewUI()
 	collector := collector.New()
 	// todo: get error
 	go consumer.Consume(createConsumeFunc(&collector))
+	helper.StartInterval(10*time.Second, updateUiFnFactory(ui, &collector))
 
-	writer := uilive.New()
-	writer.Start()
-	helper.ClearTerminal()
-	for {
-		collector.PrintTable(writer)
-		time.Sleep(10 * time.Second)
+	if err != nil {
+		return err
+	}
+	if err = ui.Start(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func updateUiFnFactory(ui *ui.UI, collector *collector.Collector) helper.IntervalAction {
+	return func() {
+		ui.UpdateListEntries(collector.ToStrRows(ui.LineLength()))
 	}
 }
 
