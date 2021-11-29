@@ -5,7 +5,6 @@ import (
 	"math"
 
 	"github.com/dhenkel92/rabbitmq-message-monitor/internal/helper"
-	"github.com/montanaflynn/stats"
 )
 
 func (list *RoutingKeyList) renderList() {
@@ -15,16 +14,13 @@ func (list *RoutingKeyList) renderList() {
 
 	result = append(result, list.renderHeader(width))
 	for _, entry := range list.data {
-		avg, _ := stats.Mean(entry.Sizes)
-		ninetyFife, _ := stats.Percentile(entry.Sizes, 95)
-		ninetyNine, _ := stats.Percentile(entry.Sizes, 99)
 		result = append(result, fmt.Sprintf(
 			"%-*s %-*d %-*s %-*s %-*s %-*s",
 			width.routingKey, entry.RoutingKey,
 			width.count, entry.Count,
-			width.avg, helper.FormatBytesToKb(avg),
-			width.ninetyFife, helper.FormatBytesToKb(ninetyFife),
-			width.ninetyNine, helper.FormatBytesToKb(ninetyNine),
+			width.avg, helper.FormatBytesToKb(entry.Avg),
+			width.ninetyFife, helper.FormatBytesToKb(entry.NinetyFife),
+			width.ninetyNine, helper.FormatBytesToKb(entry.NinetyNine),
 			width.totalSize, helper.FormatBytesToKb(entry.TotalBytes),
 		))
 	}

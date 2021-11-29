@@ -2,8 +2,6 @@ package uiRKList
 
 import (
 	"sort"
-
-	"github.com/dhenkel92/rabbitmq-message-monitor/internal/collector"
 )
 
 func (list *RoutingKeyList) Sort(sorting RoutingKeySorting) {
@@ -12,7 +10,7 @@ func (list *RoutingKeyList) Sort(sorting RoutingKeySorting) {
 	list.renderList()
 }
 
-func sortData(sorting RoutingKeySorting, data []*collector.RoutingKeyStats) []*collector.RoutingKeyStats {
+func sortData(sorting RoutingKeySorting, data []*RoutingKeyData) []*RoutingKeyData {
 	switch sorting {
 	case RK_SORTING_NAME_ASC:
 		sort.SliceStable(data, func(i, j int) bool { return data[i].RoutingKey < data[j].RoutingKey })

@@ -1,7 +1,6 @@
 package uiRKList
 
 import (
-	"github.com/dhenkel92/rabbitmq-message-monitor/internal/collector"
 	"github.com/gizak/termui/v3/widgets"
 )
 
@@ -20,7 +19,7 @@ const (
 
 type RoutingKeyList struct {
 	list    *widgets.List
-	data    []*collector.RoutingKeyStats
+	data    []*RoutingKeyData
 	sorting RoutingKeySorting
 }
 
@@ -35,4 +34,13 @@ type ListColumnWidhts struct {
 	ninetyFife int
 	ninetyNine int
 	totalSize  int
+}
+
+type RoutingKeyData struct {
+	RoutingKey string
+	TotalBytes float64
+	Count      int
+	Avg        float64
+	NinetyFife float64
+	NinetyNine float64
 }

@@ -1,7 +1,6 @@
 package uiRKList
 
 import (
-	"github.com/dhenkel92/rabbitmq-message-monitor/internal/collector"
 	"github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
 )
@@ -9,7 +8,7 @@ import (
 func New(title string, termWidth, termHeight, headerHeight int) RoutingKeyList {
 	list := RoutingKeyList{
 		list:    newList(title, termWidth, termHeight, headerHeight),
-		data:    make([]*collector.RoutingKeyStats, 0),
+		data:    make([]*RoutingKeyData, 0),
 		sorting: RK_DEFAULT_SORTING,
 	}
 	list.renderList()
