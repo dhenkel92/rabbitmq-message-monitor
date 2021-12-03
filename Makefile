@@ -8,7 +8,18 @@ style: ## Executes the pre-commit configuration
 
 .PHONY: run
 run: ## Runs the application
-	go run main.go $(ARGS)
+	go run main.go -c "amqp://guest:guest@localhost:5672/" exchange --binding "amqp.topic=#" $(ARGS)
+
+.PHONY: start-test
+start-test:
+	docker-compose up -d
+	sleep 15
+	docker-compose -f docker-compose-test.yaml up
+
+.PHONY: stop-test
+stop-test:
+	docker-compose down
+	docker-compose -f docker-compose-test.yaml down
 
 .PHONY: test
 test: ## Executes unit tests

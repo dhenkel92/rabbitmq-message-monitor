@@ -1,0 +1,71 @@
+version: '3'
+
+x-container-defaults:
+  &container-defaults
+  image: pivotalrabbitmq/perf-test:2.16.0
+
+x-publisher-conf:
+  &default-conf
+  URI: amqp://guest:guest@rabbitmq:5672
+  CONSUMERS: "0"
+  EXCHANGE: "amqp.topic"
+  TYPE: topic
+  PREDECLARED: "true"
+  QUEUE_ARGS: "x-max-length=10,x-overflow=drop-head"
+
+services:
+  publisher1:
+    <<: *container-defaults
+    container_name: publisher1
+    environment:
+      <<: *default-conf
+      PRODUCERS: "1"
+      VARIABLE_SIZE: "4965:10,899647:15,35689:5"
+      VARIABLE_RATE: "5:10,10:15,100:5"
+      QUEUE_PATTERN: "onlineshop.orders"
+      QUEUE_PATTERN_FROM: "1"
+      QUEUE_PATTERN_TO: "1"
+  publisher2:
+    <<: *container-defaults
+    container_name: publisher2
+    environment:
+      <<: *default-conf
+      PRODUCERS: "10"
+      VARIABLE_SIZE: "216:10,2692:5,89648:15"
+      RATE: "10"
+      QUEUE_PATTERN: "tracing.user.%d"
+      QUEUE_PATTERN_FROM: "1"
+      QUEUE_PATTERN_TO: "10"
+  publisher3:
+    <<: *container-defaults
+    container_name: publisher3
+    environment:
+      <<: *default-conf
+      PRODUCERS: "15"
+      SIZE: "22426"
+      VARIABLE_RATE: "30:20,130:5,10:5"
+      QUEUE_PATTERN: "application.%d.metrics"
+      QUEUE_PATTERN_FROM: "1"
+      QUEUE_PATTERN_TO: "20"
+  publisher4:
+    <<: *container-defaults
+    container_name: publisher4
+    environment:
+      <<: *default-conf
+      PRODUCERS: "1"
+      SIZE: "18368"
+      VARIABLE_RATE: "0:25,10:5"
+      QUEUE_PATTERN: "user.registration"
+      QUEUE_PATTERN_FROM: "1"
+      QUEUE_PATTERN_TO: "1"
+  publisher5:
+    <<: *container-defaults
+    container_name: publisher5
+    environment:
+      <<: *default-conf
+      PRODUCERS: "1"
+      SIZE: "1089"
+      VARIABLE_RATE: "8:10,15:15,150:5"
+      QUEUE_PATTERN: "user.login"
+      QUEUE_PATTERN_FROM: "1"
+      QUEUE_PATTERN_TO: "1"
