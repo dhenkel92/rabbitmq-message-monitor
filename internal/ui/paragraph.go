@@ -43,14 +43,14 @@ func formatInformation(columns int, data [][]string) string {
 			column1Wdth = len(row[0])
 		}
 		if len(row[1]) > column2Wdt {
-			column1Wdth = len(row[1])
+			column2Wdt = len(row[1])
 		}
 	}
 
 	res := make([]string, 0)
 
 	for _, entry := range data {
-		res = append(res, fmt.Sprintf("%-*s %*s", column1Wdth, entry[0], column2Wdt, entry[1]))
+		res = append(res, fmt.Sprintf("%*s %-*s", column1Wdth, entry[0], column2Wdt, entry[1]))
 	}
 
 	var tmpRes []string
