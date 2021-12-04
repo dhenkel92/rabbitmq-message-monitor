@@ -24,12 +24,15 @@ func newShortcutHeader(size types.WidgetSize) *widgets.Paragraph {
 	header := widgets.NewParagraph()
 	header.Title = "Shortcurts"
 	header.Text = formatInformation(2, [][]string{
-		{"[<j>](fg:blue)", "down"},
 		{"[<k>](fg:blue)", "up"},
 		{"[<gg>](fg:blue)", "top"},
+		{"[<j>](fg:blue)", "down"},
 		{"[<G>](fg:blue)", "bottom"},
-		{"[<q>](fg:blue)", "quit"},
+		{"[](fg:blue)", ""},
+		{"[](fg:blue)", ""},
+		{"[</>](fg:blue)", "search"},
 		{"[<s>](fg:blue)", "change sorting"},
+		{"[<q>](fg:blue)", "quit"},
 	})
 	header.SetRect(size.StartX, size.StartY, size.EndX, size.EndY)
 	header.Border = true
