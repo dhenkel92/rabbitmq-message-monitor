@@ -12,13 +12,12 @@ import (
 func initApp() *cli.App {
 	return &cli.App{
 		Name:  "RabbitMQ Message Monitor",
-		Usage: "",
+		Usage: "Different ways of how to monitor messages that are going through your RabbitMQ infrastructure.",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:     "connection-string",
-				Usage:    "",
-				Required: true,
-				Aliases:  []string{"c"},
+				Name:    "connection-string",
+				Usage:   "",
+				Aliases: []string{"c"},
 			},
 			&cli.StringFlag{
 				Name:    "consumer-name",
@@ -29,6 +28,7 @@ func initApp() *cli.App {
 		Commands: []*cli.Command{
 			{
 				Name:    "monitor-exchange",
+				Usage:   "Bind to several exchange and visualize the different messages.",
 				Aliases: []string{"exchange"},
 				Flags: []cli.Flag{
 					&cli.StringSliceFlag{

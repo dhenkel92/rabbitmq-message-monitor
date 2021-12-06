@@ -16,8 +16,8 @@ start-test:
 	sleep 15
 	docker-compose -f docker-compose-test.yaml up
 
-.PHONY: stop-test
-stop-test:
+.PHONY: clean
+clean:
 	docker-compose down
 	docker-compose -f docker-compose-test.yaml down
 
