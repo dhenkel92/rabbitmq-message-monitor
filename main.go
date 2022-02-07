@@ -52,6 +52,26 @@ func initApp() *cli.App {
 					return cmd.MonitorExchange(conf)
 				},
 			},
+			{
+				Name:  "server",
+				Usage: "Binds to several exchanges and exports the data to /metrics",
+				Flags: []cli.Flag{
+					&cli.StringSliceFlag{
+						Name:     "binding",
+						Aliases:  []string{"b"},
+						Usage:    "Which bindings should be created for monitoring. Format: <exchange>=<routing_key>",
+						Required: true,
+					},
+				},
+				Action: func(c *cli.Context) error {
+					conf, err := settings.ParseServerSettings(c)
+					if err != nil {
+						return err
+					}
+
+					return cmd.Server(conf)
+				},
+			},
 		},
 	}
 }

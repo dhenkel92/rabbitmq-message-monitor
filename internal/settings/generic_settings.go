@@ -7,18 +7,14 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-func ParseExchangeSettingsFromCLI(c *cli.Context) (*ExchangeMonitoringSettings, error) {
-	rawBindings := c.StringSlice("binding")
-	bindings, err := parseBindings(rawBindings)
-	if err != nil {
-		return nil, err
-	}
+type GenericSettings struct {
+	ConnectionString string
+	ConsumerName     string
+}
 
-	return &ExchangeMonitoringSettings{
-		Generic:     parseGenericSettingsFromCLI(c),
-		Bindings:    bindings,
-		QueuePrefix: c.String("queue-prefix"),
-	}, nil
+type ExchangeRTBinding struct {
+	ExchnageName string
+	RoutingKey   string
 }
 
 func parseGenericSettingsFromCLI(c *cli.Context) GenericSettings {
